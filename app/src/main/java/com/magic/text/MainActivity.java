@@ -9,25 +9,51 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.EditText;
 import android.content.DialogInterface;
+import java.util.List;
+import java.util.ArrayList;
+import android.widget.ArrayAdapter;
 
 public class MainActivity extends Activity {
 	private ListView TextListView;
+	private List<MagicText> MagicTextList=new ArrayList<MagicText>();
 	
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		DataUtils.init(MainActivity.this);
         setContentView(R.layout.main);
 		initId();
 		
     }
 	
 	private void initId() {
-		TextListView = (ListView) findViewById(R.id.main_text_list);
-		initListData();
+		TextListView=(ListView) findViewById(R.id.main_text_list);
+		loadListData();
 	}
 	
-	private void initListData() {
+	private void loadListData() {
+		int count=Integer.parseInt(DataUtils.readData(ConstData.MagicTextCountFile));
+		for (int i=0;i<count;i++) {
+			MagicTextList.add(TextToMT(DataUtils.readData(i+"."+ConstData.MagicTextFileAfter)));
+		}
+		updateList();
+	}
+	
+	private void updateList() {
+		ArrayAdapter adapter=new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, MagicTextList);
+		TextListView.setAdapter(adapter);
+	}
+	
+	private MagicText TextToMT(String text) {
+		MagicText a=new MagicText();
+		String[] q=text.split(",");
+		a.setText(q[0]);
+		a.setType(q[1]);
+		return a;
+	}
+	
+	private void saveData() {
 		
 	}
 
@@ -55,6 +81,7 @@ public class MainActivity extends Activity {
 					}
 				});
 				builder.show();
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
