@@ -31,6 +31,10 @@
 
 		</activity>
 
+		<activity
+			android:name=".EditMTActivity"
+			android:label="编辑魔字"/>
+
 	</application>
 
 </manifest>
