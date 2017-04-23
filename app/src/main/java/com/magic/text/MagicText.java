@@ -82,16 +82,18 @@ public class MagicText implements Serializable
 		@Override
 		public void run()
 		{
+			boolean conti=true;
 			String result="";
 			switch (type) {
 				case Type_闪:
 					try {
 					if (now.equals("start")) {
 						view.setText(getRandomChar()+"");
-						result="01";
+						result="0,1";
 					} else {
-						int p1=Integer.parseInt(now.charAt(0)+"");
-						int p2=Integer.parseInt(now.charAt(1)+"");
+						String[] ye=now.split(",");
+						int p1=Integer.parseInt(ye[0]);
+						int p2=Integer.parseInt(ye[1]);
 						String temp=view.getText().toString();
 						StringBuilder q=new StringBuilder(temp);
 						/*char[] t=temp.toCharArray();
@@ -106,8 +108,8 @@ public class MagicText implements Serializable
 						}
 						//view.setText(new String(t));
 						view.setText(q.toString());
-						if (p1 == text.length()) stop();
-						result=p1+"";
+						if (p1 == text.length()) conti=false;
+						result=p1+",";
 						result+=p2;
 					}
 					} catch (Exception e) {Log.e("MT", e.toString());}
@@ -115,7 +117,7 @@ public class MagicText implements Serializable
 				/*--------------------*/
 			}
 			now=result;
-			handler.postDelayed(this, ConstData.DelayTime);
+			if (conti) handler.postDelayed(this, ConstData.DelayTime);
 		}
 	};
 }

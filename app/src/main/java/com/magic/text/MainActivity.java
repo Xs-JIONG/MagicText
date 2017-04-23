@@ -107,7 +107,7 @@ public class MainActivity extends Activity
 				builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int position) {
-						MagicText a=new MagicText(edit.getText().toString());
+						MagicText a=new MagicText(edit.getText().toString(), MagicText.Type_闪);
 						MagicTextList.add(a);
 						saveData();
 						updateList();
