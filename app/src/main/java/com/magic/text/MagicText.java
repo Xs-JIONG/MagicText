@@ -4,10 +4,9 @@ import android.os.Handler;
 import android.widget.TextView;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
-import java.io.Serializable;
 import android.util.Log;
 
-public class MagicText implements Serializable
+public class MagicText
 {
 	private String text;
 	private String type;
@@ -56,7 +55,20 @@ public class MagicText implements Serializable
 		view.setText(text);
 	}
 	
-	private char getRandomChar() {
+	private boolean isChinese(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+			|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
+			|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
+			|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION) return true;
+		return false;
+	}
+	
+	private boolean isNumber(char n) {
+		return Character.isDigit(n);
+	}
+	
+	private char getRandomChinese() {
         String str = "";
         int hightPos;
         int lowPos;
@@ -74,6 +86,16 @@ public class MagicText implements Serializable
         return str.charAt(0);
     }
 	
+	private char getRandomNumber() {
+		int w=(int) (Math.random() * 10);
+		return (char) (w + 48);
+	}
+	
+	private char getRandomWord() {
+		String q="qwertyuioplkjhgfdsazxcvbnm";
+		return q.charAt((int) (Math.random() * 26));
+	}
+	
 	private String now;
 	
 	private Handler handler=new Handler();
@@ -88,7 +110,7 @@ public class MagicText implements Serializable
 				case Type_闪:
 					try {
 					if (now.equals("start")) {
-						view.setText(getRandomChar()+"");
+						if (isChinese(text.charAt(0))) view.setText(getRandomChinese()+""); else if (isNumber(text.charAt(0))) view.setText(getRandomNumber()+""); else view.setText(getRandomWord()+"");
 						result="0,1";
 					} else {
 						String[] ye=now.split(",");
@@ -98,7 +120,7 @@ public class MagicText implements Serializable
 						StringBuilder q=new StringBuilder(temp);
 						/*char[] t=temp.toCharArray();
 						t[p1]=getRandomChar();*/
-						q.replace(p1, p1+1, getRandomChar()+"");
+						if (isChinese(text.charAt(p1))) q.replace(p1, p1+1, getRandomChinese()+""); else if (isNumber(text.charAt(p1))) q.replace(p1, p1+1, getRandomNumber()+""); else q.replace(p1, p1+1, getRandomWord()+"");
 						p2++;
 						if (p2 == 5) {
 							p2=0;
