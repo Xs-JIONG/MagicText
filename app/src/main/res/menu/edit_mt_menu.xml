@@ -3,4 +3,9 @@
 	android:title="播放"
 	android:icon="@android:drawable/ic_media_play"
 	android:showAsAction="ifRoom"></item>
+	
+	<item
+		android:title="截图"
+		android:icon="@android:drawable/ic_menu_add"
+		android:showAsAction="ifRoom"></item>
 </menu>
